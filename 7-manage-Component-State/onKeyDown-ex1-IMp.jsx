@@ -1,0 +1,114 @@
+import { useState } from 'react';
+import React from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Fooditems from './components/Fooditems';
+import ErrorMsg from './components/ErrorMsg';
+import Container from './components/Container';
+import Foodinput from './components/Foodinput';
+
+
+function App() {
+  let [foodItems, setFoodItems] = useState([])
+
+  const handleonKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      let newFoodItem = event.target.value;
+      event.target.value = "";
+      let newItems = [...foodItems, newFoodItem];
+      setFoodItems(newItems);
+    }
+  };
+
+  return (
+    <>
+      <Container>
+        <h1 className="food-heading">Healthy Food</h1>
+        <Foodinput handleonKeyDown={handleonKeyDown} />
+        <ErrorMsg food={foodItems} />
+        <Fooditems food={foodItems} />
+      </Container>
+    </>
+  );
+}
+
+export default App;
+
+
+
+Foodinput
+
+import React from "react";
+import styles from "./Foodinput.module.css"
+
+function Foodinput({ handleonKeyDown }) {
+
+   return (
+      <input type="text" placeholder="Enter Food Item here" className={styles.Foodinput}
+         onKeyDown={handleonKeyDown}>
+      </input>
+   )
+}
+
+export default Foodinput;
+
+
+ErrorMsg
+
+const ErrorMsg = ({ food }) => {
+
+   return (<>
+      {food.length === 0 ? <h3>I am Still hungry</h3> : null}
+      {food.length === 0 && <h3>I need food ASAP</h3>}
+   </>
+   )
+};
+
+export default ErrorMsg;
+
+
+/* && & ? both doing same thing*/
+
+Fooditems
+import Item from "./Item";
+
+const Fooditems = ({ food }) => {
+
+   return (
+      <>
+         <ul className="list-group">
+            {food.map((item) => (
+               <Item key={item} food={item}
+                  handleBuyButton={() => console.log(`${item} bought`)} />
+            ))}
+
+
+         </ul>
+      </>
+   );
+
+};
+
+
+export default Fooditems;
+
+
+Item
+
+import styles from "./item.module.css"
+
+const Item = ({ food, handleBuyButton }) => {
+
+   return (
+      <li className={`${styles["kg-item"]} list-group-item `} >
+         <span className={styles["kg-span"]}>{food}</span>
+         <button className={`${styles.button} btn btn-info`}
+            onClick={handleBuyButton} >Buy</button>
+      </li >
+   )
+}
+
+export default Item;
+
